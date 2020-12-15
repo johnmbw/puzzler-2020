@@ -34,13 +34,15 @@ def words_that_match(words_file):
     found = set()
     for line in words_file:
         word = line.strip().lower()
-        matches = True
-        if word not in LETTERS and len(word) > 1: 
+        if len(word) > 1:
+            matches = True
             for i in range(len(word)-1):
                 pair = word[i:i+2]
                 if pair not in EDGES:
                     matches = False
                     break
+        else:
+            matches = word in LETTERS
         if matches:
             if word not in found:
                 yield word
