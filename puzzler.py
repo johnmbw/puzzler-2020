@@ -31,22 +31,19 @@ LETTERS = set(''.join(EDGES))
 
 
 def words_that_match(words_file):
-    found = set()
     for line in words_file:
-        word = line.strip().lower()
+        word = line.strip()
         if len(word) > 1:
             matches = True
             for i in range(len(word)-1):
-                pair = word[i:i+2]
+                pair = word[i:i+2].lower()
                 if pair not in EDGES:
                     matches = False
                     break
         else:
-            matches = word in LETTERS
+            matches = word.lower() in LETTERS
         if matches:
-            if word not in found:
-                yield word
-                found.add(word)
+            yield word
 
 
 def main(args):
