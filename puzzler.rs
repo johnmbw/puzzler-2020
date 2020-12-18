@@ -1,3 +1,4 @@
+use std::env;
 use std::fs::File;
 use std::io::{self, BufRead};
 
@@ -69,7 +70,13 @@ fn matches(word:&String) -> bool {
 }
 
 fn main() {
-    let file = File::open("/usr/share/dict/words").unwrap();
+    let args: Vec<String> = env::args().collect();
+    let filename = if args.len() > 1 {
+        args[1].to_string()
+    } else {
+        "/usr/share/dict/words".to_string()
+    };
+    let file = File::open(filename).unwrap();
     let lines = io::BufReader::new(file).lines();
     for line in lines {
         if let Ok(word) = line {
