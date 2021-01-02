@@ -55,8 +55,9 @@ if using Rust would be faster still.  When compiled in release mode it is
 faster than the grep command:
 
 ```
-$ rustc -C opt-level=3 puzzler.rs 
-$ time ./puzzler | wc -l
+$ make puzzlerrs
+rustc -C opt-level=3 puzzler.rs -o puzzlerrs
+$ time ./puzzlerrs | wc -l
      484
 
 real	0m0.193s
@@ -66,3 +67,19 @@ sys	0m0.012s
 
 This one relies on using Rust's match statement, which should compile to
 pretty efficient code.
+
+## C
+
+Next is a version in C.  This was surprisingly compact and makes use of `strchr`
+for pretty decent speed (I assume that `strchr` is usually well optimised).  This
+actually appears to be faster than the Rust version too.
+```
+$ make puzzlerc
+gcc -O3 puzzler.c -o puzzlerc
+$ time ./puzzlerc | wc -l
+     484
+
+real	0m0.039s
+user	0m0.028s
+sys	0m0.011s
+```
