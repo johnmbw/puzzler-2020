@@ -83,3 +83,38 @@ real	0m0.039s
 user	0m0.028s
 sys	0m0.011s
 ```
+
+## Benchmarking speed
+
+For this I used [hyperfine](https://github.com/sharkdp/hyperfine) (installable via `brew install hyperfine`).  This confirms
+that the C version is fastest and the short Python program is the slowest:
+```
+$ make benchmark
+hyperfine --warmup 3 './puzzler.py' 'python3 pzr.py /usr/share/dict/words' 'cat /usr/share/dict/words | ./puzzler.sh' './puzzlerrs' './puzzlerc'
+Benchmark #1: ./puzzler.py
+  Time (mean ± σ):     256.1 ms ±   7.2 ms    [User: 236.9 ms, System: 14.6 ms]
+  Range (min … max):   249.9 ms … 268.9 ms    11 runs
+ 
+Benchmark #2: python3 pzr.py /usr/share/dict/words
+  Time (mean ± σ):     845.6 ms ±   4.5 ms    [User: 816.0 ms, System: 22.6 ms]
+  Range (min … max):   840.4 ms … 853.9 ms    10 runs
+ 
+Benchmark #3: cat /usr/share/dict/words | ./puzzler.sh
+  Time (mean ± σ):     143.7 ms ±   4.3 ms    [User: 140.1 ms, System: 5.9 ms]
+  Range (min … max):   137.9 ms … 154.8 ms    20 runs
+ 
+Benchmark #4: ./puzzlerrs
+  Time (mean ± σ):      99.3 ms ±   6.1 ms    [User: 95.5 ms, System: 2.4 ms]
+  Range (min … max):    91.6 ms … 112.6 ms    29 runs
+ 
+Benchmark #5: ./puzzlerc
+  Time (mean ± σ):      16.6 ms ±   0.9 ms    [User: 14.3 ms, System: 1.3 ms]
+  Range (min … max):    15.4 ms …  20.6 ms    147 runs
+ 
+Summary
+  './puzzlerc' ran
+    6.00 ± 0.49 times faster than './puzzlerrs'
+    8.67 ± 0.53 times faster than 'cat /usr/share/dict/words | ./puzzler.sh'
+   15.46 ± 0.94 times faster than './puzzler.py'
+   51.06 ± 2.75 times faster than 'python3 pzr.py /usr/share/dict/words'
+```
